@@ -1,0 +1,35 @@
+Source: bidict
+Section: python
+Priority: optional
+Maintainer: William Grzybowski <william@grzy.org>
+Uploaders: Debian Python Modules Team <team+python-modules@tracker.debian.org>
+Build-Depends: debhelper-compat (= 12),
+               dh-python,
+               python3-all,
+               python3-setuptools,
+               python3-setuptools-scm,
+               python3-sphinx,
+# tests
+               python3-hypothesis,
+               python3-pytest-benchmark,
+               python3-sortedcollections,
+               python3-sortedcontainers
+Standards-Version: 4.4.0
+Homepage: https://bidict.readthedocs.io
+Vcs-Browser: https://salsa.debian.org/python-team/modules/bidict
+Vcs-Git: https://salsa.debian.org/python-team/modules/bidict.git
+Testsuite: autopkgtest-pkg-python
+
+Package: python3-bidict
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}, ${sphinxdoc:Depends}
+Description: Bidirectional map data structures and related functionality
+ Features:
+  - has carefully designed APIs for safety, simplicity, flexibility,
+    and ergonomics
+  - is CPython-, PyPy-, Python 2-, and Python 3-compatible
+  - has extensive test coverage (including property-based tests and benchmarks)
+    run continuously on all supported Python versions and OSes
+  - integrates natively with Python’s collections interfaces
+  - is implemented in concise, well-factored, well-documented pure Python that
+    leverages a number of advanced language features

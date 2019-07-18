@@ -1,0 +1,5 @@
+bidict (0.18.0-1) experimental; urgency=medium
+
+  * Initial release (Closes: #932216)
+
+ -- William Grzybowski <william@grzy.org>  Thu, 18 Jul 2019 19:37:54 -0300
