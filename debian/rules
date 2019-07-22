@@ -2,6 +2,8 @@
 #export DH_VERBOSE = 1
 
 export PYBUILD_NAME=bidict
+export PYBUILD_TEST_ARGS=; rm -rf .hypothesis
+export PYBUILD_TEST_PYTEST=1
 
 %:
 	dh $@ --with python3,sphinxdoc --buildsystem=pybuild
@@ -13,11 +15,5 @@ override_dh_auto_build:
 
 override_dh_auto_clean:
 	dh_auto_clean
-	rm -rf .hypothesis
 	rm -rf .pytest_cache
 	make -C docs/ clean
-
-override_dh_auto_test:
-ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
-	python3 run_tests.py
-endif
