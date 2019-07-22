@@ -1,6 +1,7 @@
 From: William Grzybowski <william@grzy.org>
 Date: Thu, 18 Jul 2019 21:57:36 -0300
 Subject: Remove external images because of privacy breach
+Forwarded: not-needed
 
 ---
  docs/changelog.rst          |  4 ---

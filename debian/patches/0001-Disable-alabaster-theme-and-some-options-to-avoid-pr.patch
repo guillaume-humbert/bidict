@@ -1,6 +1,7 @@
 From: William Grzybowski <william@grzy.org>
 Date: Thu, 18 Jul 2019 21:49:12 -0300
 Subject: Disable alabaster theme and some options to avoid privacy breach
+Forwarded: not-needed
 
 ---
  docs/conf.py | 16 ++++++++--------
