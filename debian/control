@@ -11,6 +11,7 @@ Build-Depends: debhelper-compat (= 12),
                python3-sphinx,
 # tests
                python3-hypothesis,
+               python3-pytest,
                python3-pytest-benchmark,
                python3-sortedcollections,
                python3-sortedcontainers

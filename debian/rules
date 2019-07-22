@@ -2,18 +2,18 @@
 #export DH_VERBOSE = 1
 
 export PYBUILD_NAME=bidict
-export PYBUILD_TEST_ARGS=; rm -rf .hypothesis
-export PYBUILD_TEST_PYTEST=1
+export PYBUILD_AFTER_TEST=rm -rf .hypothesis
 
 %:
 	dh $@ --with python3,sphinxdoc --buildsystem=pybuild
 
-
-override_dh_auto_build:
-	dh_auto_build
-	make -C docs/ clean html
-
 override_dh_auto_clean:
 	dh_auto_clean
 	rm -rf .pytest_cache
-	make -C docs/ clean
+
+override_dh_sphinxdoc:
+ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
+	python3 -m sphinx -b html docs \
+		$(CURDIR)/debian/python3-bidict/usr/share/doc/python3-bidict/html
+	dh_sphinxdoc
+endif
