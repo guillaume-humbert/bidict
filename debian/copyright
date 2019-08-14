@@ -7,8 +7,12 @@ Copyright: 2009-2019 Joshua Bronson <jab@math.brown.edu>
 License: MPL-2.0
 
 Files: docs/_static/logo*
-Copyright: ? Muhammad Faisal
+Copyright: 2015 Muhammad Faisal
+           2015 Joshua Bronson <jab@math.brown.edu>
 License: CC-BY-3.0-US
+Comment:
+ bidict's logo was derived from icon by Muhammad Faisal
+ downloaded from https://thenounproject.com/term/book/1330481/
 
 Files: debian/*
 Copyright: 2019 William Grzybowski <william@grzy.org>
