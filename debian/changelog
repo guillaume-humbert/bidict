@@ -1,3 +1,10 @@
+bidict (0.18.0-2) unstable; urgency=medium
+
+  * Team upload.
+  * Uploading to unstable.
+
+ -- Ondřej Nový <onovy@debian.org>  Wed, 14 Aug 2019 17:59:48 +0200
+
 bidict (0.18.0-1) experimental; urgency=medium
 
   * Initial release (Closes: #932216)
