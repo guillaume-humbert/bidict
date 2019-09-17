@@ -11,14 +11,12 @@ import gc
 import pickle
 
 from functools import reduce
+from copy import deepcopy
 from collections import OrderedDict
 from weakref import ref
 
 import pytest
-from hypothesis import given
-
-import _setup_hypothesis
-import _strategies as st
+from hypothesis import HealthCheck, given, settings
 
 from bidict import BidictException, OrderedBidictBase, namedbidict, inverted
 from bidict.compat import (
@@ -26,8 +24,7 @@ from bidict.compat import (
 )
 from bidict._util import _iteritems_args_kw  # pylint: disable=protected-access
 
-
-_setup_hypothesis.load_profile()
+from . import _strategies as st
 
 
 # pylint: disable=invalid-name
@@ -43,6 +40,7 @@ def test_unequal_to_non_mapping(bi, not_a_mapping):
 
 
 @given(st.BIDICT_AND_MAPPING_FROM_DIFFERENT_ITEMS)
+@settings(suppress_health_check=[HealthCheck.too_slow])
 def test_unequal_to_mapping_with_different_items(bidict_and_mapping_from_different_items):
     """Bidicts should be unequal to mappings containing different items."""
     bi, mapping = bidict_and_mapping_from_different_items
@@ -157,7 +155,7 @@ def test_consistency_after_method_call(bi_and_cmp_dict, args_by_method):
 
 
 @given(st.MUTABLE_BIDICTS, st.LISTS_PAIRS_DUP, st.DUP_POLICIES_DICT)
-def test_putall_same_as_sequential_put(bi, items, dup_policies):
+def test_putall_same_as_put_for_each_item(bi, items, dup_policies):
     """*bi.putall(items) <==> for i in items: bi.put(i)* for all duplication policies."""
     check = bi.copy()
     expect = bi.copy()
@@ -230,7 +228,7 @@ def test_orderedbidict_iterkeys_itervals_iteritems(ob):
     assert list(ob.iteritems()) == ob.items()
 
 
-@given(st.st.tuples(st.TEXT, st.TEXT, st.TEXT))
+@given(st.st.tuples(st.IDENTIFIER_TYPE, st.IDENTIFIER_TYPE, st.IDENTIFIER_TYPE))
 def test_namedbidict_raises_on_invalid_name(names):
     """:func:`bidict.namedbidict` should raise if given invalid names."""
     typename, keyname, valname = names
@@ -313,9 +311,9 @@ def test_refcycle_orderedbidict_nodes(ob_cls, init_items):
             map(ref, some_ordered_bidict._fwdm.values()),  # pylint: disable=protected-access
             []
         )
-        assert all(ref() is not None for ref in node_weakrefs)
+        assert all(r() is not None for r in node_weakrefs)
         del some_ordered_bidict
-        assert all(ref() is None for ref in node_weakrefs)
+        assert all(r() is None for r in node_weakrefs)
     finally:
         gc.enable()
 
@@ -354,7 +352,21 @@ def test_pickle_roundtrips(bi):
         dumps_args['protocol'] = 2
     pickled = pickle.dumps(bi, **dumps_args)
     roundtripped = pickle.loads(pickled)
+    assert roundtripped is roundtripped.inv.inv
     assert roundtripped == bi
+    assert roundtripped.inv == bi.inv
+    assert roundtripped.inv.inv == bi.inv.inv
+
+
+@given(st.BIDICTS)
+def test_deepcopy(bi):
+    """A bidict should equal its deepcopy."""
+    cp = deepcopy(bi)
+    assert cp is not bi
+    assert cp.inv.inv is cp
+    assert cp.inv.inv is not bi
+    assert bi == cp
+    assert bi.inv == cp.inv
 
 
 def test_iteritems_args_kw_raises_on_too_many_args():

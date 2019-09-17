@@ -47,21 +47,26 @@ SETUP_REQS = [
     'setuptools_scm < 4',
 ]
 
-SPHINX_REQ = 'Sphinx < 2'
+SPHINX_REQS = [
+    'Sphinx < 3',
+    # Sphinx's docutils pin has no upper bound. Pin to 0.15.2 pending sphinx-doc/sphinx#6594.
+    # (Pulling 0.15 previously broke "make doctest" with SyntaxError under Python 2.7.)
+    'docutils == 0.15.2',
+]
 
-DOCS_REQS = [SPHINX_REQ]
+DOCS_REQS = SPHINX_REQS
 
 TEST_REQS = [
-    'hypothesis < 4',
+    'hypothesis < 5',
     'py < 2',
-    'pytest < 5',
+    'pytest < 6',
     'pytest-benchmark >= 3.2.0, < 4',
     'sortedcollections < 2',
     'sortedcontainers < 3',
     # pytest's doctest support doesn't support Sphinx extensions
     # (https://www.sphinx-doc.org/en/latest/usage/extensions/doctest.html)
     # so †est the code in the Sphinx docs using Sphinx's own doctest support.
-    SPHINX_REQ,
+    DOCS_REQS,
 ]
 
 # Split out coverage from test requirements since it slows down the tests.
@@ -70,16 +75,39 @@ COVERAGE_REQS = [
     'pytest-cov < 3',
 ]
 
-DEV_REQ = SETUP_REQS + TEST_REQS + COVERAGE_REQS + DOCS_REQS + [
+# The following dependencies have a higher chance of suddenly causing CI to fail after updating
+# even between minor versions, so pin to currently-working minor versions. Upgrade to newer
+# minor versions manually to have a chance to fix any resulting breakage before it hits CI.
+FLAKE8_REQ = 'flake8 < 3.8'
+PYDOCSTYLE_REQ = 'pydocstyle < 3.1'
+PYLINT_REQS = [
+    # Pin to exact versions of Pylint and Astroid, which don't follow semver.
+    # See https://github.com/PyCQA/astroid/issues/651#issuecomment-469021040
+    'pylint == 2.2.3',
+    'astroid == 2.1.0',
+]
+
+LINT_REQS = [
+    FLAKE8_REQ,
+    PYDOCSTYLE_REQ,
+] + PYLINT_REQS
+
+DEV_REQS = SETUP_REQS + DOCS_REQS + TEST_REQS + COVERAGE_REQS + LINT_REQS + [
     'pre-commit < 2',
     'tox < 4',
-    # The following dependencies have a higher chance of suddenly causing CI to fail after updating
-    # even between minor versions so pin to currently-working minor versions. Upgrade to newer
-    # minor versions manually to have a chance to fix any resulting breakage before it hits CI.
-    'flake8 < 3.8',
-    'pydocstyle < 3.1',
-    'pylint < 2.3',
 ]
+
+EXTRAS_REQS = dict(
+    docs=DOCS_REQS,
+    test=TEST_REQS,
+    coverage=COVERAGE_REQS,
+    lint=LINT_REQS,
+    dev=DEV_REQS,
+    sphinx=SPHINX_REQS,
+    flake8=[FLAKE8_REQ],
+    pydocstyle=[PYDOCSTYLE_REQ],
+    pylint=PYLINT_REQS,
+)
 
 setup(
     name='bidict',
@@ -114,10 +142,5 @@ setup(
     setup_requires=SETUP_REQS,  # required so pip < 10 install works (no PEP-517/518 support)
     # for more details see https://www.python.org/dev/peps/pep-0518/#rationale
     tests_require=TEST_REQS,
-    extras_require=dict(
-        test=TEST_REQS,
-        coverage=COVERAGE_REQS,
-        docs=DOCS_REQS,
-        dev=DEV_REQ,
-    ),
+    extras_require=EXTRAS_REQS,
 )

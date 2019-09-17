@@ -33,7 +33,7 @@ Status
    :target: https://codecov.io/gh/jab/bidict
    :alt: Test coverage
 
-.. image:: https://img.shields.io/lgtm/alerts/g/jab/bidict.svg
+.. image:: https://img.shields.io/lgtm/alerts/github/jab/bidict.svg
   :target: https://lgtm.com/projects/g/jab/bidict/
   :alt: LGTM alerts
 
@@ -45,9 +45,9 @@ Status
    :target: https://bestpractices.coreinfrastructure.org/en/projects/2354
    :alt: CII best practices badge
 
-.. image:: https://tidelift.com/badges/github/jab/bidict
+.. image:: https://img.shields.io/badge/tidelift-pro%20support-EF914C.svg
    :target: https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=docs
-   :alt: Tidelift dependency badge
+   :alt: Paid support available via Tidelift
 
 .. Hide to reduce clutter
    .. image:: https://ci.appveyor.com/api/projects/status/gk133415udncwto3/branch/master?svg=true
@@ -85,6 +85,15 @@ Bidict:
   that leverages a number of advanced language features [#fn-learning]_
 
 
+⚠️ Python 2 EOL ⚠️
+++++++++++++++++++
+
+Python 2 support will be dropped in a future release.
+
+See `python3statement.org <https://python3statement.org>`__
+for more info.
+
+
 Installation
 ------------
 
@@ -109,8 +118,8 @@ head to the :doc:`intro` [#fn-intro]_
 and proceed from there.
 
 
-Community and Voluntary Support
--------------------------------
+Community Support
+-----------------
 
 .. image:: https://img.shields.io/badge/chat-on%20gitter-5AB999.svg?logo=gitter-white
    :target: https://gitter.im/jab/bidict
@@ -119,11 +128,11 @@ Community and Voluntary Support
 If you are thinking of using bidict in your work,
 or if you have any questions, comments, or suggestions,
 I'd love to know about your use case
-and provide as much support for it as possible.
+and provide as much voluntary support for it as possible.
 
 Please feel free to leave a message in the
 `chatroom <https://gitter.im/jab/bidict>`__
-or to open a new issue on GitHub.
+or open a new issue on GitHub.
 You can search through
 `existing issues <https://github.com/jab/bidict/issues>`__
 before creating a new one
@@ -135,7 +144,7 @@ Paid Support via Tidelift
 
 .. image:: https://img.shields.io/badge/tidelift-pro%20support-EF914C.svg
    :target: https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=readme
-   :alt: Support via Tidelift
+   :alt: Paid support available via Tidelift
 
 If your use case requires a greater level of support,
 contractual support for bidict can be obtained through the
@@ -174,8 +183,12 @@ Release Notifications
    :target: https://libraries.io/pypi/bidict
    :alt: Follow on libraries.io
 
-Tip: `Subscribe to bidict releases <https://libraries.io/pypi/bidict>`__
+`Subscribe to bidict releases <https://libraries.io/pypi/bidict>`__
 on libraries.io to be notified when new versions of bidict are released.
+Alternatively,
+on `GitHub <https://github.com/jab/bidict>`__,
+click "`Watch <https://help.github.com/en/articles/watching-and-unwatching-releases-for-a-repository>`__"
+and choose "Releases".
 
 
 Learning from bidict
