@@ -14,15 +14,41 @@ Release Notifications
 .. duplicated in README.rst
    (would use `.. include::` but GitHub doesn't understand it)
 
+.. image:: https://img.shields.io/badge/libraries.io-subscribe-5BC0DF.svg
+   :target: https://libraries.io/pypi/bidict
+   :alt: Follow on libraries.io
+
 Tip: `Subscribe to bidict releases <https://libraries.io/pypi/bidict>`__
 on libraries.io to be notified when new versions of bidict are released.
+Alternatively,
+`on GitHub <https://github.com/jab/bidict>`__,
+click "`Watch <https://help.github.com/en/articles/watching-and-unwatching-releases-for-a-repository>`__"
+and choose "Releases".
+
+
+0.18.2 (2019-09-08)
+-------------------
+
+- Warn that Python 2 support will be dropped in a future release
+  when Python 2 is detected.
+
+
+0.18.1 (2019-09-03)
+-------------------
+
+- Fix a regression introduced by the memory optimizations added in 0.15.0
+  which caused
+  :func:`deepcopied <copy.deepcopy>` and
+  :func:`unpickled <pickle.loads>`
+  bidicts to have their inverses set incorrectly.
+  `#94 <https://github.com/jab/bidict/issues/94>`__
 
 
 0.18.0 (2019-02-14)
 -------------------
 
 - Rename ``bidict.BidirectionalMapping.inv`` to :attr:`~bidict.BidirectionalMapping.inverse`
-  and make :attr:`bidict.BidictBase.inv`` an alias for :attr:`~bidict.BidictBase.inverse`.
+  and make :attr:`bidict.BidictBase.inv` an alias for :attr:`~bidict.BidictBase.inverse`.
   `#86 <https://github.com/jab/bidict/issues/86>`__
 
 - :meth:`bidict.BidirectionalMapping.__subclasshook__` now requires an ``inverse`` attribute
@@ -35,9 +61,9 @@ on libraries.io to be notified when new versions of bidict are released.
   and warn when Python 3 < 3.5 is detected
   rather than Python 3 < 3.3.
 
-  According to `PyPI Stats <https://pypistats.org/packages/bidict>`__,
-  Python 3.4 represents only about 3% of bidict downloads as of January 2019.
-  The latest release of Pip has also deprecated support for Python 3.4.
+  Python 3.4 reaches `end of life <https://www.python.org/dev/peps/pep-0429/>`__ on 2019-03-18.
+  As of January 2019, 3.4 represents only about 3% of bidict downloads on
+  `PyPI Stats <https://pypistats.org/packages/bidict>`__.
 
 
 0.17.5 (2018-11-19)
@@ -109,8 +135,8 @@ Minor code, interop, and (semi-)private API improvements.
 -------------------
 
 - Improve packaging by adding a pyproject.toml
-  (`thanks, @gaborbernat <https://github.com/jab/bidict/pull/81>`__)
   and by including more supporting files in the distribution.
+  `#81 <https://github.com/jab/bidict/pull/81>`__
 
 - Drop pytest-runner and support for running tests via ``python setup.py test``
   in preference to ``pytest`` or ``python -m pytest``.
@@ -213,7 +239,7 @@ Speedups and memory usage improvements
   See the new
   :ref:`addendum:Bidict Avoids Reference Cycles`
   documentation.
-  Fixes `#24 <https://github.com/jab/bidict/issues/20>`__.
+  `#24 <https://github.com/jab/bidict/issues/20>`__
 
 - Make :func:`bidict.BidictBase.__eq__` significantly
   more speed- and memory-efficient when comparing to
@@ -348,8 +374,7 @@ The following breaking changes are expected to affect few if any users.
 - Fix a bug introduced in 0.14.0 for Python 2 users
   where attempting to call ``viewitems()``
   would cause a ``TypeError``.
-  Thanks Richard Sanger for
-  `reporting <https://github.com/jab/bidict/issues/48>`__.
+  `#48 <https://github.com/jab/bidict/issues/48>`__
 
 
 0.14.0 (2017-11-20)
@@ -493,7 +518,7 @@ This release includes multiple API simplifications and improvements.
   ``issubclass(OldStyleClass, BidirectionalMapping)`` once again
   works with old-style classes,
   returning ``False`` rather than raising :class:`AttributeError`
-  (`thanks, @knaperek <https://github.com/jab/bidict/pull/41>`__).
+  `#41 <https://github.com/jab/bidict/pull/41>`__
 
 
 0.13.0 (2017-01-19)
@@ -649,8 +674,8 @@ This release includes multiple API simplifications and improvements.
 - Implement :func:`~bidict.BidictBase.__copy__`
   for use with the :mod:`copy` module.
 
-- Fix issue preventing a client class from inheriting from ``loosebidict``
-  (see `#34 <https://github.com/jab/bidict/issues/34>`__).
+- Fix issue preventing a client class from inheriting from ``loosebidict``.
+  `#34 <https://github.com/jab/bidict/issues/34>`__
 
 - Add benchmarking to tests.
 
@@ -787,7 +812,7 @@ Breaking API Changes
   `Gitter chat room <https://gitter.im/jab/bidict>`__,
   and other community-oriented improvements.
 
-- Adopt Pytest (thanks Tom Viner and Adopt Pytest Month).
+- Adopt Pytest.
 
 - Add property-based tests via
   `hypothesis <https://hypothesis.readthedocs.io>`__.

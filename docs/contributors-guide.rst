@@ -112,6 +112,18 @@ Submitting Changes
 Other Ways to Contribute
 ------------------------
 
+.. image:: https://img.shields.io/badge/Gumroad-Chip%20in-orange.svg
+  :target: https://gumroad.com/l/bidict
+  :alt: Chip in via Gumroad
+
+.. image:: https://img.shields.io/badge/Bountysource-Chip%20in-brightgreen.svg
+  :target: https://www.bountysource.com/teams/bidict
+  :alt: Chip in via Bountysource
+
+.. image:: https://img.shields.io/badge/PayPal-Chip%20in-blue.svg
+  :target: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=jab%40math%2ebrown%2eedu&lc=US&item_name=Support%20bidict&button_subtype=services&currency_code=USD&bn=PP%2dBuyNowBF%3aPaypal%2dBuy%2520a%2520Drink%2dblue%2esvg%3aNonHosted
+  :alt: Chip in via PayPal
+
 .. duplicated in README.rst
    (would use `.. include::` but GitHub doesn't understand it)
 
@@ -137,6 +149,13 @@ there are other ways to contribute.
 
 - If you come across other people who could find bidict useful,
   please spread the word.
+
+
+**Please support bidict:**
+
+.. image:: https://raw.githubusercontent.com/jab/bidict/master/assets/support-on-gumroad.png
+  :target: https://gumroad.com/l/bidict
+  :alt: Support bidict
 
 
 Code of Conduct

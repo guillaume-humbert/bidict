@@ -22,6 +22,7 @@ run_tests.py
 setup.cfg
 setup.py
 tox.ini
+.github/FUNDING.yml
 assets/bidict-types-diagram.dot
 assets/bidict-types-diagram.png
 assets/custom.css
@@ -82,12 +83,14 @@ docs/_static/logo-sm.png
 docs/_static/logo-square.png
 docs/_static/logo.png
 docs/_static/support-on-gumroad.png
+tests/__init__.py
+tests/conftest.py
 tests/test_benchmark.py
 tests/test_bidict.txt
 tests/test_class_relationships.py
 tests/test_metadata.py
 tests/test_orderedbidict.txt
-tests/hypothesis/_setup_hypothesis.py
-tests/hypothesis/_strategies.py
-tests/hypothesis/_types.py
-tests/hypothesis/test_properties.py
+tests/properties/__init__.py
+tests/properties/_strategies.py
+tests/properties/_types.py
+tests/properties/test_properties.py

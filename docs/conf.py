@@ -125,7 +125,7 @@ modindex_common_prefix = ['bidict.']
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#html_theme = 'alabaster'
+html_theme = 'alabaster'
 #html_theme = 'sphinx_rtd_theme'
 #html_theme = 'nature'
 
@@ -133,18 +133,18 @@ modindex_common_prefix = ['bidict.']
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = dict(
-    #analytics_id='UA-10116163-3',
+    analytics_id='UA-10116163-3',
     description=bidict.__description__,
     link_hover='#247BA1',
-    #github_banner=True,
-    #github_repo='bidict',
-    #github_type='star',
-    #github_user='jab',
+    github_banner=True,
+    github_repo='bidict',
+    github_type='star',
+    github_user='jab',
     page_width='1000px',
     show_powered_by=False,
     show_relbar_bottom=True,
-    #donate_url='https://gumroad.com/l/bidict',
-    #tidelift_url='https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=docs',  # noqa: E501; pylint: disable=line-too-long
+    donate_url='https://gumroad.com/l/bidict',
+    tidelift_url='https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=docs',  # noqa: E501; pylint: disable=line-too-long
 )
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -318,3 +318,8 @@ autosectionlabel_prefix_document = True
 # http://www.sphinx-doc.org/en/master/usage/extensions/doctest.html
 doctest_global_setup = """
 """
+
+
+def setup(app):
+    """https://docs.readthedocs.io/en/latest/guides/adding-custom-css.html#adding-custom-css-or-javascript-to-a-sphinx-project"""  # noqa: E501; pylint: disable=line-too-long
+    app.add_javascript('custom.js')

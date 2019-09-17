@@ -8,6 +8,13 @@ python: '3.7'
 dist: 'xenial'
 
 
+# https://docs.travis-ci.com/user/customizing-the-build/
+# "Without the top-level env, no job will be allowed to fail."
+env:
+  global:
+    - 'INSTALL_EXTRAS=test'
+
+
 before_install:  # Ensure we have the required versions of Python and Pip.
   - 'echo "TRAVIS_PULL_REQUEST_SHA: $TRAVIS_PULL_REQUEST_SHA"'
   - 'echo "TRAVIS_COMMIT: $TRAVIS_COMMIT"'
@@ -43,7 +50,12 @@ before_install:  # Ensure we have the required versions of Python and Pip.
 
 
 install:  # Install our test dependencies.
-  - 'travis_retry pip install -U --upgrade-strategy=eager .[test$([[ "$COVERAGE" ]] && echo ",coverage")]'
+  - |
+    [[ "$COVERAGE" ]] && INSTALL_EXTRAS+=",coverage"
+    install_cmd="pip install -U --upgrade-strategy=eager ."
+    [[ "$INSTALL_EXTRAS" ]] && install_cmd+="[$INSTALL_EXTRAS]"
+    echo "install_cmd: $install_cmd"
+    travis_retry $install_cmd
 
 
 before_script:
@@ -57,10 +69,18 @@ before_script:
 
 
 script:  # Run the test suite.
-  # See tests/hypothesis/_setup_hypothesis.py
-  - 'export HYPOTHESIS_PROFILE=$([[ "$TRAVIS_EVENT_TYPE" == cron ]] && echo more-examples)'
-  - 'export PYTEST_ADDOPTS=$([[ "$COVERAGE" ]] && echo "--cov=bidict --cov-config=.coveragerc")'
-  - './run_tests.py'
+  - |
+    if [[ "$TRAVIS_EVENT_TYPE" == "cron" ]]; then
+      export HYPOTHESIS_PROFILE="more-examples"  # See tests/hypothesis/_setup_hypothesis.py
+    else
+      export HYPOTHESIS_PROFILE="default"
+    fi
+    export PYTEST_ADDOPTS="--hypothesis-profile=${HYPOTHESIS_PROFILE}"
+
+    if [[ "$COVERAGE" ]]; then
+      export PYTEST_ADDOPTS="${PYTEST_ADDOPTS} --cov=bidict --cov-config=.coveragerc"
+    fi
+    ./run_tests.py
 
 
 after_script:
@@ -76,8 +96,11 @@ after_script:
 
 matrix:
   allow_failures:
-    - env: 'ALLOW_FAIL=1'
-  fast_finish: true
+    - env: 'TASK=docs-linkcheck INSTALL_EXTRAS=docs'
+    - env: 'TASK=test-linux-cpython-3.8-dev'
+    - env: 'TASK=deploy-if-tag'
+  ## fast_finish causes Travis to sned a useless daily "build pending" email; not worth the noise.
+  # fast_finish: true
   include:
     # Each job below performs a single task. Setting a per-job "TASK" env var
     # causes Travis to clearly show each job's task in the web UI.
@@ -110,32 +133,33 @@ matrix:
       os: 'osx'
       language: 'generic'
 
-    ## Linting, static analysis, code style.
-    - env: 'TASK=lint-flake8'
-      before_install: 'skip'
-      install: 'travis_retry pip install "flake8<3.8"'  # keep in sync with the version in setup.py
-      script: 'flake8 $LINT_SRC'
-
-    - env: 'TASK=lint-pylint'
-      before_install: 'skip'
-      install: 'travis_retry pip install "pylint<2.3" "hypothesis<4" "pytest<5" "Sphinx<2"'  # keep in sync with the versions in setup.py
-      script: 'pylint --jobs=0 $LINT_SRC'
-
-    - env: 'TASK=lint-pydocstyle'
-      before_install: 'skip'
-      install: 'travis_retry pip install "pydocstyle<3.1"'  # keep in sync with the version in setup.py
-      script: 'pydocstyle $LINT_SRC'
-
-    ## Misc.
-    - env: 'TASK=docs-build'
-      before_install: 'skip'
-      install: 'travis_retry pip install "Sphinx<2"'  # keep in sync with the version in setup.py
-      script: './build-docs.sh'
-
-    - env: 'TASK=test-with-optimization-flag'  # make sure there are no relied-on side effects in assert statements
+    ## Make sure there are no relied-on side effects in assert statements.
+    - env: 'TASK=test-with-optimization-flag'
       before_install: 'skip'
       install: 'skip'
       script: 'python -O -m doctest -o IGNORE_EXCEPTION_DETAIL -o ELLIPSIS tests/*.txt'
+
+    ## Linting, static analysis, code style.
+    - env: 'TASK=lint-flake8 INSTALL_EXTRAS=flake8'
+      before_install: 'skip'
+      script: 'flake8 $LINT_SRC'
+
+    - env: 'TASK=lint-pylint INSTALL_EXTRAS=pylint,test'
+      before_install: 'skip'
+      script: 'pylint --jobs=0 $LINT_SRC'
+
+    - env: 'TASK=lint-pydocstyle INSTALL_EXTRAS=pydocstyle'
+      before_install: 'skip'
+      script: 'pydocstyle $LINT_SRC'
+
+    ## Misc.
+    - env: 'TASK=docs-build INSTALL_EXTRAS=docs'
+      before_install: 'skip'
+      script: './build-docs.sh'
+
+    - env: 'TASK=docs-linkcheck INSTALL_EXTRAS=docs'
+      before_install: 'skip'
+      script: '(cd docs && travis_retry make linkcheck)'
 
     ## Remaining CPython versions on Linux.
     - python: '3.6'
@@ -144,17 +168,11 @@ matrix:
     - python: '3.5'
       env: 'TASK=test-linux-cpython-3.5'
 
-    ## Misc.
-    - env: 'TASK=docs-linkcheck ALLOW_FAIL=1'
-      before_install: 'skip'
-      install: 'travis_retry pip install "Sphinx<2"'  # keep in sync with the version in setup.py
-      script: '(cd docs && travis_retry make linkcheck)'
-
     - python: '3.8-dev'
-      env: 'TASK=test-linux-cpython-3.8-dev ALLOW_FAIL=1'
+      env: 'TASK=test-linux-cpython-3.8-dev'
 
     - stage: 'deploy-if-tag'
-      env: 'TASK=deploy-if-tag ALLOW_FAIL=1'
+      env: 'TASK=deploy-if-tag'
       before_install: 'skip'
       install: 'skip'
       script: 'skip'
