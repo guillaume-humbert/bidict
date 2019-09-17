@@ -1,6 +1,7 @@
 bidict (0.18.2-1) unstable; urgency=medium
 
   * New upstream release
+  * d/control: remove line about compatible python versions from description
   * d/patches: reapply patch 0002 catching up upstream changes
 
  -- William Grzybowski <william@grzy.org>  Tue, 17 Sep 2019 13:41:16 -0300

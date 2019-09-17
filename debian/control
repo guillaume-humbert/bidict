@@ -28,7 +28,6 @@ Description: Bidirectional map data structures and related functionality
  Features:
   - has carefully designed APIs for safety, simplicity, flexibility,
     and ergonomics
-  - is CPython-, PyPy-, Python 2-, and Python 3-compatible
   - has extensive test coverage (including property-based tests and benchmarks)
     run continuously on all supported Python versions and OSes
   - integrates natively with Python’s collections interfaces
