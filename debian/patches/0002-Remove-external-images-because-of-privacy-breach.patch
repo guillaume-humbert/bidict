@@ -1,8 +1,8 @@
 From: William Grzybowski <william@grzy.org>
 Date: Thu, 18 Jul 2019 21:57:36 -0300
 Subject: Remove external images because of privacy breach
-Forwarded: not-needed
 
+Forwarded: not-needed
 ---
  docs/changelog.rst          |  4 ---
  docs/contributors-guide.rst | 19 ------------
@@ -10,7 +10,7 @@ Forwarded: not-needed
  3 files changed, 98 deletions(-)
 
 diff --git a/docs/changelog.rst b/docs/changelog.rst
-index 4c43bac..fe55578 100644
+index d28e01c..41cbd2e 100644
 --- a/docs/changelog.rst
 +++ b/docs/changelog.rst
 @@ -14,10 +14,6 @@ Release Notifications
@@ -23,7 +23,7 @@ index 4c43bac..fe55578 100644
 -
  Tip: `Subscribe to bidict releases <https://libraries.io/pypi/bidict>`__
  on libraries.io to be notified when new versions of bidict are released.
- 
+ Alternatively,
 diff --git a/docs/contributors-guide.rst b/docs/contributors-guide.rst
 index e20b95b..a7b8238 100644
 --- a/docs/contributors-guide.rst
@@ -62,7 +62,7 @@ index e20b95b..a7b8238 100644
  ---------------
  
 diff --git a/docs/home.rst b/docs/home.rst
-index b5ab4f7..6e10702 100644
+index 3e58965..4c1aef3 100644
 --- a/docs/home.rst
 +++ b/docs/home.rst
 @@ -9,65 +9,6 @@ bidict
@@ -93,7 +93,7 @@ index b5ab4f7..6e10702 100644
 -   :target: https://codecov.io/gh/jab/bidict
 -   :alt: Test coverage
 -
--.. image:: https://img.shields.io/lgtm/alerts/g/jab/bidict.svg
+-.. image:: https://img.shields.io/lgtm/alerts/github/jab/bidict.svg
 -  :target: https://lgtm.com/projects/g/jab/bidict/
 -  :alt: LGTM alerts
 -
@@ -105,9 +105,9 @@ index b5ab4f7..6e10702 100644
 -   :target: https://bestpractices.coreinfrastructure.org/en/projects/2354
 -   :alt: CII best practices badge
 -
--.. image:: https://tidelift.com/badges/github/jab/bidict
+-.. image:: https://img.shields.io/badge/tidelift-pro%20support-EF914C.svg
 -   :target: https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=docs
--   :alt: Tidelift dependency badge
+-   :alt: Paid support available via Tidelift
 -
 -.. Hide to reduce clutter
 -   .. image:: https://ci.appveyor.com/api/projects/status/gk133415udncwto3/branch/master?svg=true
@@ -131,9 +131,9 @@ index b5ab4f7..6e10702 100644
  
  Bidict:
  ^^^^^^^
-@@ -112,10 +53,6 @@ and proceed from there.
- Community and Voluntary Support
- -------------------------------
+@@ -121,10 +62,6 @@ and proceed from there.
+ Community Support
+ -----------------
  
 -.. image:: https://img.shields.io/badge/chat-on%20gitter-5AB999.svg?logo=gitter-white
 -   :target: https://gitter.im/jab/bidict
@@ -142,18 +142,18 @@ index b5ab4f7..6e10702 100644
  If you are thinking of using bidict in your work,
  or if you have any questions, comments, or suggestions,
  I'd love to know about your use case
-@@ -133,10 +70,6 @@ in case your questions or concerns have been adressed there already.
+@@ -142,10 +79,6 @@ in case your questions or concerns have been adressed there already.
  Paid Support via Tidelift
  -------------------------
  
 -.. image:: https://img.shields.io/badge/tidelift-pro%20support-EF914C.svg
 -   :target: https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=readme
--   :alt: Support via Tidelift
+-   :alt: Paid support available via Tidelift
 -
  If your use case requires a greater level of support,
  contractual support for bidict can be obtained through the
  `Tidelift subscription <https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=readme>`__.
-@@ -170,10 +103,6 @@ Release Notifications
+@@ -179,10 +112,6 @@ Release Notifications
  .. duplicated in CHANGELOG.rst:
     (would use `.. include::` but GitHub doesn't understand it)
  
@@ -161,10 +161,10 @@ index b5ab4f7..6e10702 100644
 -   :target: https://libraries.io/pypi/bidict
 -   :alt: Follow on libraries.io
 -
- Tip: `Subscribe to bidict releases <https://libraries.io/pypi/bidict>`__
+ `Subscribe to bidict releases <https://libraries.io/pypi/bidict>`__
  on libraries.io to be notified when new versions of bidict are released.
- 
-@@ -232,10 +161,6 @@ please consider chipping in toward the costs
+ Alternatively,
+@@ -245,10 +174,6 @@ please consider chipping in toward the costs
  of bidict's maintenance and development
  and/or ask your organization to do the same.
  
