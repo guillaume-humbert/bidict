@@ -10,6 +10,7 @@ bidict (0.21.0-1) UNRELEASED; urgency=medium
     - Add python3-sphinx-autodoc-typehints as Build-Depends
     - Add Rules-Requires-Root: no
     - Bump debhelper to 13
+    - Update Standards-Version to 4.5.0
 
  -- Håvard Flaget Aasen <haavard_aasen@yahoo.no>  Fri, 04 Sep 2020 08:44:41 +0200
 
