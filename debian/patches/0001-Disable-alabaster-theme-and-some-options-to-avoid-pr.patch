@@ -1,14 +1,14 @@
 From: William Grzybowski <william@grzy.org>
 Date: Thu, 18 Jul 2019 21:49:12 -0300
 Subject: Disable alabaster theme and some options to avoid privacy breach
-Forwarded: not-needed
 
+Forwarded: not-needed
 ---
  docs/conf.py | 16 ++++++++--------
  1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/docs/conf.py b/docs/conf.py
-index a839e69..97224d5 100644
+index 4555f10..dbe0d6e 100644
 --- a/docs/conf.py
 +++ b/docs/conf.py
 @@ -125,7 +125,7 @@ modindex_common_prefix = ['bidict.']
@@ -40,9 +40,9 @@ index a839e69..97224d5 100644
      show_powered_by=False,
      show_relbar_bottom=True,
 -    donate_url='https://gumroad.com/l/bidict',
--    tidelift_url='https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=docs',  # noqa: E501; pylint: disable=line-too-long
+-    tidelift_url='https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=docs',
 +    #donate_url='https://gumroad.com/l/bidict',
-+    #tidelift_url='https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=docs',  # noqa: E501; pylint: disable=line-too-long
++    #tidelift_url='https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=docs',
  )
  
  # Add any paths that contain custom themes here, relative to this directory.

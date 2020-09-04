@@ -5,12 +5,12 @@ Subject: Remove external images because of privacy breach
 Forwarded: not-needed
 ---
  docs/changelog.rst          |  4 ---
- docs/contributors-guide.rst | 19 ------------
- docs/home.rst               | 75 ---------------------------------------------
- 3 files changed, 98 deletions(-)
+ docs/contributors-guide.rst | 20 --------------
+ docs/home.rst               | 67 ---------------------------------------------
+ 3 files changed, 91 deletions(-)
 
 diff --git a/docs/changelog.rst b/docs/changelog.rst
-index d28e01c..41cbd2e 100644
+index 10e2961..3bb20d3 100644
 --- a/docs/changelog.rst
 +++ b/docs/changelog.rst
 @@ -14,10 +14,6 @@ Release Notifications
@@ -21,14 +21,14 @@ index d28e01c..41cbd2e 100644
 -   :target: https://libraries.io/pypi/bidict
 -   :alt: Follow on libraries.io
 -
- Tip: `Subscribe to bidict releases <https://libraries.io/pypi/bidict>`__
- on libraries.io to be notified when new versions of bidict are released.
- Alternatively,
+ Tip: Subscribe to releases
+ `on GitHub <https://github.blog/changelog/2018-11-27-watch-releases/>`__ or
+ `libraries.io <https://libraries.io/pypi/bidict>`__
 diff --git a/docs/contributors-guide.rst b/docs/contributors-guide.rst
-index e20b95b..a7b8238 100644
+index 72963aa..5c3ef3c 100644
 --- a/docs/contributors-guide.rst
 +++ b/docs/contributors-guide.rst
-@@ -112,18 +112,6 @@ Submitting Changes
+@@ -112,19 +112,6 @@ Submitting Changes
  Other Ways to Contribute
  ------------------------
  
@@ -36,18 +36,19 @@ index e20b95b..a7b8238 100644
 -  :target: https://gumroad.com/l/bidict
 -  :alt: Chip in via Gumroad
 -
--.. image:: https://img.shields.io/badge/Bountysource-Chip%20in-brightgreen.svg
--  :target: https://www.bountysource.com/teams/bidict
--  :alt: Chip in via Bountysource
--
 -.. image:: https://img.shields.io/badge/PayPal-Chip%20in-blue.svg
 -  :target: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=jab%40math%2ebrown%2eedu&lc=US&item_name=Support%20bidict&button_subtype=services&currency_code=USD&bn=PP%2dBuyNowBF%3aPaypal%2dBuy%2520a%2520Drink%2dblue%2esvg%3aNonHosted
 -  :alt: Chip in via PayPal
 -
+-.. 2020-1-1: bountysource.com domain expired, commented out here + removed from .github/FUNDING.yml
+-   image:: https://img.shields.io/badge/Bountysource-Chip%20in-brightgreen.svg
+-  :target: https://www.bountysource.com/teams/bidict
+-  :alt: Chip in via Bountysource
+-
  .. duplicated in README.rst
     (would use `.. include::` but GitHub doesn't understand it)
  
-@@ -151,13 +139,6 @@ there are other ways to contribute.
+@@ -152,13 +139,6 @@ there are other ways to contribute.
    please spread the word.
  
  
@@ -62,12 +63,12 @@ index e20b95b..a7b8238 100644
  ---------------
  
 diff --git a/docs/home.rst b/docs/home.rst
-index 3e58965..4c1aef3 100644
+index a5ec27f..05f7a46 100644
 --- a/docs/home.rst
 +++ b/docs/home.rst
-@@ -9,65 +9,6 @@ bidict
+@@ -11,58 +11,6 @@
  
- Efficient, Pythonic bidirectional map implementation and related functionality.
+ The bidirectional mapping library for Python.
  
 -.. image:: https://raw.githubusercontent.com/jab/bidict/master/assets/logo-sm.png
 -   :target: https://bidict.readthedocs.io/
@@ -93,23 +94,16 @@ index 3e58965..4c1aef3 100644
 -   :target: https://codecov.io/gh/jab/bidict
 -   :alt: Test coverage
 -
--.. image:: https://img.shields.io/lgtm/alerts/github/jab/bidict.svg
--  :target: https://lgtm.com/projects/g/jab/bidict/
--  :alt: LGTM alerts
--
--.. image:: https://api.codacy.com/project/badge/Grade/6628756a73254cd895656348236833b8
--   :target: https://www.codacy.com/app/jab/bidict
--   :alt: Codacy grade
--
--.. image:: https://bestpractices.coreinfrastructure.org/projects/2354/badge
--   :target: https://bestpractices.coreinfrastructure.org/en/projects/2354
--   :alt: CII best practices badge
--
--.. image:: https://img.shields.io/badge/tidelift-pro%20support-EF914C.svg
--   :target: https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=docs
--   :alt: Paid support available via Tidelift
--
 -.. Hide to reduce clutter
+-   .. image:: https://img.shields.io/lgtm/alerts/github/jab/bidict.svg
+-      :target: https://lgtm.com/projects/g/jab/bidict/
+-      :alt: LGTM alerts
+-   .. image:: https://bestpractices.coreinfrastructure.org/projects/2354/badge
+-      :target: https://bestpractices.coreinfrastructure.org/en/projects/2354
+-      :alt: CII best practices badge
+-   .. image:: https://img.shields.io/badge/tidelift-pro%20support-orange.svg
+-      :target: https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=docs
+-      :alt: Paid support available via Tidelift
 -   .. image:: https://ci.appveyor.com/api/projects/status/gk133415udncwto3/branch/master?svg=true
 -      :target: https://ci.appveyor.com/project/jab/bidict
 -      :alt: AppVeyor (Windows) build status
@@ -124,36 +118,35 @@ index 3e58965..4c1aef3 100644
 -   :target: https://raw.githubusercontent.com/jab/bidict/master/LICENSE
 -   :alt: License
 -
--.. image:: https://img.shields.io/badge/dynamic/json.svg?label=downloads&url=https%3A%2F%2Fpypistats.org%2Fapi%2Fpackages%2Fbidict%2Frecent%3Fperiod%3Dmonth&query=%24.data.last_month&colorB=blue&suffix=%2fmonth
--   :target: https://pypistats.org/packages/bidict
--   :alt: Downloads past month
+-.. image:: https://static.pepy.tech/badge/bidict
+-   :target: https://pepy.tech/project/bidict
+-   :alt: PyPI Downloads
 -
  
- Bidict:
- ^^^^^^^
-@@ -121,10 +62,6 @@ and proceed from there.
+ ``bidict``:
+ ^^^^^^^^^^^
+@@ -122,9 +70,6 @@ and proceed from there.
  Community Support
  -----------------
  
 -.. image:: https://img.shields.io/badge/chat-on%20gitter-5AB999.svg?logo=gitter-white
 -   :target: https://gitter.im/jab/bidict
 -   :alt: Chat
--
- If you are thinking of using bidict in your work,
- or if you have any questions, comments, or suggestions,
- I'd love to know about your use case
-@@ -142,10 +79,6 @@ in case your questions or concerns have been adressed there already.
- Paid Support via Tidelift
- -------------------------
  
--.. image:: https://img.shields.io/badge/tidelift-pro%20support-EF914C.svg
+ If you are thinking of using ``bidict`` in your work,
+ or if you have any questions, comments, or suggestions,
+@@ -143,10 +88,6 @@ in case your questions or concerns have been adressed there already.
+ Enterprise-Grade Support via Tidelift
+ -------------------------------------
+ 
+-.. image:: https://img.shields.io/badge/tidelift-pro%20support-orange.svg
 -   :target: https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=readme
 -   :alt: Paid support available via Tidelift
 -
  If your use case requires a greater level of support,
- contractual support for bidict can be obtained through the
+ enterprise-grade support for ``bidict`` can be obtained via the
  `Tidelift subscription <https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=readme>`__.
-@@ -179,10 +112,6 @@ Release Notifications
+@@ -180,10 +121,6 @@ Release Notifications
  .. duplicated in CHANGELOG.rst:
     (would use `.. include::` but GitHub doesn't understand it)
  
@@ -161,11 +154,11 @@ index 3e58965..4c1aef3 100644
 -   :target: https://libraries.io/pypi/bidict
 -   :alt: Follow on libraries.io
 -
- `Subscribe to bidict releases <https://libraries.io/pypi/bidict>`__
- on libraries.io to be notified when new versions of bidict are released.
- Alternatively,
-@@ -245,10 +174,6 @@ please consider chipping in toward the costs
- of bidict's maintenance and development
+ Subscribe to releases
+ `on GitHub <https://github.blog/changelog/2018-11-27-watch-releases/>`__ or
+ `libraries.io <https://libraries.io/pypi/bidict>`__
+@@ -246,10 +183,6 @@ please consider chipping in toward the costs
+ of its maintenance and development
  and/or ask your organization to do the same.
  
 -.. image:: https://raw.githubusercontent.com/jab/bidict/master/assets/support-on-gumroad.png
