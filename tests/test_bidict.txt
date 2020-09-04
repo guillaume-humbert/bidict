@@ -1,4 +1,4 @@
-# Copyright 2009-2019 Joshua Bronson. All Rights Reserved.
+# Copyright 2009-2020 Joshua Bronson. All Rights Reserved.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -215,62 +215,14 @@ per-call control over duplication behavior
 Even with RAISE duplication behavior,
 inserting existing items is a no-op (i.e. it doesn't raise)::
 
-    >>> from bidict import RAISE
-    >>> b.putall([('three', 3), ('one', 1)],
-    ...          on_dup_key=RAISE, on_dup_val=RAISE) is not 'an error'
-    True
+    >>> from bidict import RAISE, OnDup
+    >>> b.putall(
+    ...     [('three', 3), ('one', 1)],
+    ...     OnDup(key=RAISE, val=RAISE)
+    ... )  # does not raise an error because these items were already contained
     >>> b0 = b.copy()
     >>> b.putall([])  # no-op
     >>> b == b0
-    True
-
-Python 2 dict "view*" APIs are supported::
-
-    >>> from bidict.compat import PY2
-    >>> sorted(b.viewkeys()) == sorted(b.keys()) if PY2 else True
-    True
-    >>> sorted(b.viewvalues()) == sorted(b.values()) if PY2 else True
-    True
-    >>> sorted(b.viewitems()) == sorted(b.items()) if PY2 else True
-    True
-
-    >>> from bidict import OrderedBidict
-    >>> ob = OrderedBidict(b)
-    >>> sorted(ob.viewkeys()) == sorted(ob.keys()) if PY2 else True
-    True
-    >>> sorted(ob.viewvalues()) == sorted(ob.values()) if PY2 else True
-    True
-    >>> sorted(ob.viewitems()) == sorted(ob.items()) if PY2 else True
-    True
-
-On Python 2, bidict.compat.{iter,view}* functions should still work
-even if passed a Mapping that does not provide corresponding methods
-(e.g. a sortedcontainers.SortedDict, see
-https://github.com/grantjenks/python-sortedcontainers/pull/106#issuecomment-435631649)::
-
-    >>> class MissingViewMethodsDict(dict):
-    ...     def __getattribute__(self, attr):
-    ...         if attr in (
-    ...                 'iterkeys', 'itervalues', 'iteritems',
-    ...                 'viewkeys', 'viewvalues', 'viewitems'):
-    ...             raise AttributeError(attr)
-    ...         return object.__getattribute__(self, attr)
-
-    >>> mvmdict = MissingViewMethodsDict({'a': 'A', 'b': 'B'})
-    >>> from bidict.compat import (
-    ...     iterkeys, itervalues, iteritems,
-    ...     viewkeys, viewvalues, viewitems, KeysView, ValuesView, ItemsView)
-    >>> set(iterkeys(mvmdict)) == set(mvmdict.keys())
-    True
-    >>> set(itervalues(mvmdict)) == set(mvmdict.values())
-    True
-    >>> set(iteritems(mvmdict)) == set(mvmdict.items())
-    True
-    >>> viewkeys(mvmdict) == KeysView(mvmdict)
-    True
-    >>> set(viewvalues(mvmdict)) == set(ValuesView(mvmdict))  # ValuesView is not a Set, must wrap
-    True
-    >>> viewitems(mvmdict) == ItemsView(mvmdict)
     True
 
 Make sure copy.copy and copy.deepcopy create shallow and deep copies, respectively::

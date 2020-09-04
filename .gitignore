@@ -5,8 +5,10 @@
 .coverage
 .eggs
 .hypothesis
+.idea
 .mypy_cache
 .tox
+.venv
 .vscode
 __pycache__
 _build

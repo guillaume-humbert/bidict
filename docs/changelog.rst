@@ -18,12 +18,193 @@ Release Notifications
    :target: https://libraries.io/pypi/bidict
    :alt: Follow on libraries.io
 
-Tip: `Subscribe to bidict releases <https://libraries.io/pypi/bidict>`__
-on libraries.io to be notified when new versions of bidict are released.
-Alternatively,
-`on GitHub <https://github.com/jab/bidict>`__,
-click "`Watch <https://help.github.com/en/articles/watching-and-unwatching-releases-for-a-repository>`__"
-and choose "Releases".
+Tip: Subscribe to releases
+`on GitHub <https://github.blog/changelog/2018-11-27-watch-releases/>`__ or
+`libraries.io <https://libraries.io/pypi/bidict>`__
+to be notified when new versions of ``bidict`` are released.
+
+
+0.21.0 (2020-08-22)
+-------------------
+
+- :mod:`bidict` now provides
+  `type hints <https://www.python.org/dev/peps/pep-0484/>`__! ⌨️ ✅
+
+  Adding type hints to :mod:`bidict` poses particularly interesting challenges
+  due to the combination of generic types,
+  dynamically-generated types
+  (such as :ref:`inverse bidict classes <extending:Dynamic Inverse Class Generation>`
+  and :func:`namedbidicts <bidict.namedbidict>`),
+  and complicating optimizations
+  such as the use of slots and weakrefs.
+
+  It didn't take long to hit bugs and missing features
+  in the state of the art for type hinting in Python today,
+  e.g. missing higher-kinded types support
+  (`python/typing#548 <https://github.com/python/typing/issues/548#issuecomment-621195693>`__),
+  too-narrow type hints for :class:`collections.abc.Mapping`
+  (`python/typeshed#4435 <https://github.com/python/typeshed/issues/4435>`__),
+  a :class:`typing.Generic` bug in Python 3.6
+  (`BPO-41451 <https://bugs.python.org/issue41451>`__), etc.
+
+  That said, this release should provide a solid foundation
+  for code using :mod:`bidict` that enables static type checking.
+
+  As always, if you spot any opportunities to improve :mod:`bidict`
+  (including its new type hints),
+  please don't hesitate to submit a PR!
+
+- Add :class:`bidict.MutableBidirectionalMapping` ABC.
+
+  The :ref:`other-bidict-types:Bidict Types Diagram` has been updated accordingly.
+
+- Drop support for Python 3.5,
+  which reaches end of life on 2020-09-13,
+  represents a tiny percentage of bidict downloads on
+  `PyPI Stats <https://pypistats.org/packages/bidict>`__,
+  and lacks support for
+  `variable type hint syntax <https://www.python.org/dev/peps/pep-0526/>`__,
+  `ordered dicts <https://stackoverflow.com/a/39980744>`__,
+  and :attr:`object.__init_subclass__`.
+
+- Remove the no-longer-needed ``bidict.compat`` module.
+
+- Move :ref:`inverse bidict class access <extending:Dynamic Inverse Class Generation>`
+  from a property to an attribute set in
+  :attr:`~bidict.BidictBase.__init_subclass__`,
+  to save function call overhead on repeated access.
+
+- :meth:`bidict.OrderedBidictBase.__iter__` no longer accepts
+  a ``reverse`` keyword argument so that it matches the signature of
+  :meth:`container.__iter__`.
+
+- Set the ``__module__`` attribute of various :mod:`bidict` types
+  (using :func:`sys._getframe` when necessary)
+  so that private, internal modules are not exposed
+  e.g. in classes' repr strings.
+
+- :func:`~bidict.namedbidict` now immediately raises :class:`TypeError`
+  if the provided ``base_type`` does not provide
+  ``_isinv`` or :meth:`~object.__getstate__`,
+  rather than succeeding with a class whose instances may raise
+  :class:`AttributeError` when these attributes are accessed.
+
+
+0.20.0 (2020-07-23)
+-------------------
+
+The following breaking changes are expected to affect few if any users.
+
+Remove APIs deprecated in the previous release:
+
+- ``bidict.OVERWRITE`` and ``bidict.IGNORE``.
+
+- The ``on_dup_key``, ``on_dup_val``, and ``on_dup_kv`` arguments of
+  :meth:`~bidict.bidict.put` and :meth:`~bidict.bidict.putall`.
+
+- The ``on_dup_key``, ``on_dup_val``, and ``on_dup_kv``
+  :class:`~bidict.bidict` class attributes.
+
+- Remove :meth:`bidict.BidirectionalMapping.__subclasshook__`
+  due to lack of use and maintenance cost.
+
+  Fixes a bug introduced in 0.15.0
+  that caused any class with an ``inverse`` attribute
+  to be incorrectly considered a subclass of :class:`collections.abc.Mapping`.
+  `#111 <https://github.com/jab/bidict/issues/111>`__
+
+
+0.19.0 (2020-01-09)
+-------------------
+
+- Drop support for Python 2
+  :ref:`as promised in v0.18.2 <changelog:0.18.2 (2019-09-08)>`.
+
+  The ``bidict.compat`` module has been pruned accordingly.
+
+  This makes bidict more efficient on Python 3
+  and enables further improvement to bidict in the future.
+
+- Deprecate ``bidict.OVERWRITE`` and ``bidict.IGNORE``.
+  A :class:`UserWarning` will now be emitted if these are used.
+
+  :attr:`bidict.DROP_OLD` and :attr:`bidict.DROP_NEW` should be used instead.
+
+- Rename ``DuplicationPolicy`` to :class:`~bidict.OnDupAction`
+  (and implement it via an :class:`~enum.Enum`).
+
+  An :class:`~bidict.OnDupAction` may be one of
+  :attr:`~bidict.RAISE`,
+  :attr:`~bidict.DROP_OLD`, or
+  :attr:`~bidict.DROP_NEW`.
+
+- Expose the new :class:`~bidict.OnDup` class
+  to contain the three :class:`~bidict.OnDupAction`\s
+  that should be taken upon encountering
+  the three kinds of duplication that can occur
+  (*key*, *val*, *kv*).
+
+- Provide the
+  :attr:`~bidict.ON_DUP_DEFAULT`,
+  :attr:`~bidict.ON_DUP_RAISE`, and
+  :attr:`~bidict.ON_DUP_DROP_OLD`
+  :class:`~bidict.OnDup` convenience instances.
+
+- Deprecate the
+  ``on_dup_key``, ``on_dup_val``, and ``on_dup_kv`` arguments
+  of :meth:`~bidict.bidict.put` and :meth:`~bidict.bidict.putall`.
+  A :class:`UserWarning` will now be emitted if these are used.
+
+  These have been subsumed by the new *on_dup* argument,
+  which takes an :class:`~bidict.OnDup` instance.
+
+  Use it like this: ``bi.put(1, 2, OnDup(key=RAISE, val=...))``.
+  Or pass one of the instances already provided,
+  such as :attr:`~bidict.ON_DUP_DROP_OLD`.
+  Or just don't pass an *on_dup* argument
+  to use the default value of :attr:`~bidict.ON_DUP_RAISE`.
+
+  The :ref:`basic-usage:Values Must Be Unique` docs
+  have been updated accordingly.
+
+- Deprecate the
+  ``on_dup_key``, ``on_dup_val``, and ``on_dup_kv``
+  :class:`~bidict.bidict` class attributes.
+  A :class:`UserWarning` will now be emitted if these are used.
+
+  These have been subsumed by the new
+  :attr:`~bidict.bidict.on_dup` class attribute,
+  which takes an :class:`~bidict.OnDup` instance.
+
+  See the updated :doc:`extending` docs for example usage.
+
+- Improve the more efficient implementations of
+  :meth:`~bidict.BidirectionalMapping.keys`,
+  :meth:`~bidict.BidirectionalMapping.values`, and
+  :meth:`~bidict.BidirectionalMapping.items`,
+  and now also provide a more efficient implementation of
+  :meth:`~bidict.BidirectionalMapping.__iter__`
+  by delegating to backing :class:`dict`\s
+  in the bidict types for which this is possible.
+
+- Move
+  :meth:`bidict.BidictBase.values` to
+  :meth:`bidict.BidirectionalMapping.values`,
+  since the implementation is generic.
+
+- No longer use ``__all__`` in :mod:`bidict`'s ``__init__.py``.
+
+
+0.18.3 (2019-09-22)
+-------------------
+
+- Improve validation of names passed to :func:`~bidict.namedbidict`:
+  Use :meth:`str.isidentifier` on Python 3,
+  and a better regex on Python 2.
+
+- On Python 3,
+  set :attr:`~definition.__qualname__` on :func:`~bidict.namedbidict` classes
+  based on the provided ``typename`` argument.
 
 
 0.18.2 (2019-09-08)
@@ -55,7 +236,7 @@ and choose "Releases".
   rather than an ``inv`` attribute for a class to qualify as a virtual subclass.
   This breaking change is expected to affect few if any users.
 
-- Add Python 2/3-compatible :attr:`bidict.compat.collections_abc` alias.
+- Add Python 2/3-compatible ``bidict.compat.collections_abc`` alias.
 
 - Stop testing Python 3.4 on CI,
   and warn when Python 3 < 3.5 is detected
@@ -120,14 +301,14 @@ Minor code, interop, and (semi-)private API improvements.
 - Upgrade to latest major
   `sortedcontainers <https://github.com/grantjenks/python-sortedcontainers>`__
   version (from v1 to v2)
-  for the :ref:`extending:Sorted Bidict Recipes`.
+  for the :ref:`extending:\`\`SortedBidict\`\` Recipes`.
 
 - ``bidict.compat.{view,iter}{keys,values,items}`` on Python 2
   no longer assumes the target object implements these methods,
   as they're not actually part of the
   :class:`~collections.abc.Mapping` interface,
   and provides fallback implementations when the methods are unavailable.
-  This allows the :ref:`extending:Sorted Bidict Recipes`
+  This allows the :ref:`extending:\`\`SortedBidict\`\` Recipes`
   to continue to work with sortedcontainers v2 on Python 2.
 
 
@@ -205,7 +386,7 @@ Misc
 
 Minor code and efficiency improvements to
 :func:`~bidict.inverted` and
-:func:`~bidict._util._iteritems_args_kw`
+:func:`~bidict._iter._iteritems_args_kw`
 (formerly ``bidict.pairs()``).
 
 
@@ -214,7 +395,7 @@ Minor Breaking API Changes
 
 The following breaking changes are expected to affect few if any users.
 
-- Rename ``bidict.pairs()`` → :func:`bidict._util._iteritems_args_kw`.
+- Rename ``bidict.pairs()`` → ``bidict._util._iteritems_args_kw``.
 
 
 0.15.0 (2018-03-29)
@@ -237,7 +418,7 @@ Speedups and memory usage improvements
   in CPython as soon as you no longer hold any references to it,
   rather than having to wait for the next garbage collection.
   See the new
-  :ref:`addendum:Bidict Avoids Reference Cycles`
+  :ref:`addendum:\`\`bidict\`\` Avoids Reference Cycles`
   documentation.
   `#24 <https://github.com/jab/bidict/issues/20>`__
 
@@ -264,7 +445,7 @@ Minor Bugfixes
 - If you create a custom bidict subclass whose ``_fwdm_cls``
   differs from its ``_invm_cls``
   (as in the ``FwdKeySortedBidict`` example
-  from the :ref:`extending:Sorted Bidict Recipes`),
+  from the :ref:`extending:\`\`SortedBidict\`\` Recipes`),
   the inverse bidirectional mapping type
   (with ``_fwdm_cls`` and ``_invm_cls`` swapped)
   is now correctly computed and used automatically
@@ -318,10 +499,9 @@ The following breaking changes are expected to affect few if any users.
   Most users do not need to know or care about any of these.
 
 - The :attr:`~bidict.RAISE`,
-  :attr:`~bidict.OVERWRITE`, and
-  :attr:`~bidict.IGNORE`
+  ``OVERWRITE``, and ``IGNORE``
   duplication policies are no longer available as attributes of
-  :class:`bidict.DuplicationPolicy`,
+  ``DuplicationPolicy``,
   and can now only be accessed as attributes of
   the :mod:`bidict` module namespace,
   which was the canonical way to refer to them anyway.
@@ -492,21 +672,20 @@ This release includes multiple API simplifications and improvements.
 
 - ``loosebidict`` and ``looseorderedbidict`` have been removed.
   A simple recipe to implement equivalents yourself is now given in
-  :ref:`extending:OverwritingBidict Recipe`.
+  :doc:`extending`.
 
 - Rename ``FrozenBidictBase._compute_hash()`` →
   ``frozenbidict.compute_hash()``.
 
-- Rename ``DuplicationBehavior`` →
-  :class:`~bidict.DuplicationPolicy`.
+- Rename ``DuplicationBehavior`` → ``DuplicationPolicy``.
 
 - Rename:
 
-  - ``bidict.BidictBase._fwd_class`` → ``.fwd_cls``
-  - ``bidict.BidictBase._inv_class`` → ``.inv_cls``
-  - ``bidict.BidictBase._on_dup_key`` → :attr:`~bidict.BidictBase.on_dup_key`
-  - ``bidict.BidictBase._on_dup_val`` → :attr:`~bidict.BidictBase.on_dup_val`
-  - ``bidict.BidictBase._on_dup_kv`` → :attr:`~bidict.BidictBase.on_dup_kv`
+  - ``BidictBase._fwd_class`` → ``.fwd_cls``
+  - ``BidictBase._inv_class`` → ``.inv_cls``
+  - ``BidictBase._on_dup_key`` → ``on_dup_key``
+  - ``BidictBase._on_dup_val`` → ``on_dup_val``
+  - ``BidictBase._on_dup_kv`` → ``on_dup_kv``
 
 
 0.13.1 (2017-03-15)
@@ -589,7 +768,7 @@ This release includes multiple API simplifications and improvements.
   e.g. ``bidict()`` rather than ``bidict({})`` and
   ``orderedbidict()`` rather than ``orderedbidict([])``.
 
-- Add :attr:`bidict.compat.PYPY` and
+- Add ``bidict.compat.PYPY`` and
   remove unused ``bidict.compat.izip_longest``.
 
 0.12.0 (2016-07-03)
@@ -610,8 +789,8 @@ This release includes multiple API simplifications and improvements.
   These can take the following values:
 
   - :attr:`~bidict.RAISE`
-  - :attr:`~bidict.OVERWRITE`
-  - :attr:`~bidict.IGNORE`
+  - ``OVERWRITE``
+  - ``IGNORE``
 
   ``on_dup_kv`` can also take ``ON_DUP_VAL``.
 
@@ -654,16 +833,16 @@ This release includes multiple API simplifications and improvements.
 
 - Add
 
-  - :func:`bidict.compat.viewkeys`
-  - :func:`bidict.compat.viewvalues`
-  - :func:`bidict.compat.iterkeys`
-  - :func:`bidict.compat.itervalues`
+  - ``bidict.compat.viewkeys``
+  - ``bidict.compat.viewvalues``
+  - ``bidict.compat.iterkeys``
+  - ``bidict.compat.itervalues``
   - ``bidict.compat.izip``
   - ``bidict.compat.izip_longest``
 
   to complement the existing
-  :func:`~bidict.compat.iteritems` and
-  :func:`~bidict.compat.viewitems`
+  ``bidict.compat.iteritems`` and
+  ``bidict.compat.viewitems``
   compatibility helpers.
 
 - More efficient implementations of
@@ -823,7 +1002,7 @@ Breaking API Changes
 ++++++++++++++++++++
 
 - Move ``bidict.iteritems()`` and ``bidict.viewitems()``
-  to new :mod:`bidict.compat` module.
+  to new ``bidict.compat`` module.
 
 - Move :class:`bidict.inverted`
   to new ``bidict.util`` module
