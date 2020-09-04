@@ -9,6 +9,7 @@ Build-Depends: debhelper-compat (= 12),
                python3-setuptools,
                python3-setuptools-scm,
                python3-sphinx,
+               python3-sphinx-autodoc-typehints,
 # tests
                python3-hypothesis,
                python3-pytest,
