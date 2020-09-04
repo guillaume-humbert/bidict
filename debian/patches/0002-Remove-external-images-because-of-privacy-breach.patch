@@ -5,9 +5,9 @@ Subject: Remove external images because of privacy breach
 Forwarded: not-needed
 ---
  docs/changelog.rst          |  4 ---
- docs/contributors-guide.rst | 20 --------------
- docs/home.rst               | 67 ---------------------------------------------
- 3 files changed, 91 deletions(-)
+ docs/contributors-guide.rst | 20 -------------
+ docs/home.rst               | 71 +--------------------------------------------
+ 3 files changed, 1 insertion(+), 94 deletions(-)
 
 diff --git a/docs/changelog.rst b/docs/changelog.rst
 index 10e2961..3bb20d3 100644
@@ -63,10 +63,10 @@ index 72963aa..5c3ef3c 100644
  ---------------
  
 diff --git a/docs/home.rst b/docs/home.rst
-index a5ec27f..05f7a46 100644
+index a5ec27f..6eec363 100644
 --- a/docs/home.rst
 +++ b/docs/home.rst
-@@ -11,58 +11,6 @@
+@@ -11,61 +11,7 @@
  
  The bidirectional mapping library for Python.
  
@@ -122,10 +122,14 @@ index a5ec27f..05f7a46 100644
 -   :target: https://pepy.tech/project/bidict
 -   :alt: PyPI Downloads
 -
+-
+-``bidict``:
+-^^^^^^^^^^^
++
  
- ``bidict``:
- ^^^^^^^^^^^
-@@ -122,9 +70,6 @@ and proceed from there.
+ - has been used for many years by several teams at
+   **Google, Venmo, CERN, Bank of America Merrill Lynch, Bloomberg, Two Sigma,** and many others
+@@ -122,9 +68,6 @@ and proceed from there.
  Community Support
  -----------------
  
@@ -135,7 +139,7 @@ index a5ec27f..05f7a46 100644
  
  If you are thinking of using ``bidict`` in your work,
  or if you have any questions, comments, or suggestions,
-@@ -143,10 +88,6 @@ in case your questions or concerns have been adressed there already.
+@@ -143,10 +86,6 @@ in case your questions or concerns have been adressed there already.
  Enterprise-Grade Support via Tidelift
  -------------------------------------
  
@@ -146,7 +150,7 @@ index a5ec27f..05f7a46 100644
  If your use case requires a greater level of support,
  enterprise-grade support for ``bidict`` can be obtained via the
  `Tidelift subscription <https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=readme>`__.
-@@ -180,10 +121,6 @@ Release Notifications
+@@ -180,10 +119,6 @@ Release Notifications
  .. duplicated in CHANGELOG.rst:
     (would use `.. include::` but GitHub doesn't understand it)
  
@@ -157,7 +161,7 @@ index a5ec27f..05f7a46 100644
  Subscribe to releases
  `on GitHub <https://github.blog/changelog/2018-11-27-watch-releases/>`__ or
  `libraries.io <https://libraries.io/pypi/bidict>`__
-@@ -246,10 +183,6 @@ please consider chipping in toward the costs
+@@ -246,10 +181,6 @@ please consider chipping in toward the costs
  of its maintenance and development
  and/or ask your organization to do the same.
  
