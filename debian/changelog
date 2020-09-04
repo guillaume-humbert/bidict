@@ -1,5 +1,6 @@
-bidict (0.21.0-1) UNRELEASED; urgency=medium
+bidict (0.21.0-1) unstable; urgency=medium
 
+  * Team upload.
   [ Ondřej Nový ]
   * Bump Standards-Version to 4.4.1.
 
@@ -14,7 +15,7 @@ bidict (0.21.0-1) UNRELEASED; urgency=medium
     - Fix maintainer email
   * d/*.links: add entry to link duplicated file
 
- -- Håvard Flaget Aasen <haavard_aasen@yahoo.no>  Fri, 04 Sep 2020 08:44:41 +0200
+ -- Håvard Flaget Aasen <haavard_aasen@yahoo.no>  Fri, 04 Sep 2020 11:22:11 +0200
 
 bidict (0.18.2-1) unstable; urgency=medium
 
