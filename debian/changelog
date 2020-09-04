@@ -6,7 +6,9 @@ bidict (0.21.0-1) UNRELEASED; urgency=medium
   [ Håvard Flaget Aasen ]
   * New upstream version 0.21.0
   * Rebase patches
-  * d/control: add python3-sphinx-autodoc-typehints as Build-Depends
+  * d/control:
+    - Add python3-sphinx-autodoc-typehints as Build-Depends
+    - Add Rules-Requires-Root: no
 
  -- Håvard Flaget Aasen <haavard_aasen@yahoo.no>  Fri, 04 Sep 2020 08:44:41 +0200
 

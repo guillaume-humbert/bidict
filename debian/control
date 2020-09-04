@@ -17,6 +17,7 @@ Build-Depends: debhelper-compat (= 12),
                python3-sortedcollections,
                python3-sortedcontainers
 Standards-Version: 4.4.1
+Rules-Requires-Root: no
 Homepage: https://bidict.readthedocs.io
 Vcs-Browser: https://salsa.debian.org/python-team/modules/bidict
 Vcs-Git: https://salsa.debian.org/python-team/modules/bidict.git
