@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2009-2019 Joshua Bronson. All Rights Reserved.
+# Copyright 2009-2020 Joshua Bronson. All Rights Reserved.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -47,13 +47,16 @@ update_graph() {
 
 # Use parentheses instead of braces around body so it runs in a subshell -> cd doesn't leak.
 build_docs() (
-  cd docs
   make clean html
 )
 
 main() {
-  update_graph
-  build_docs
+  cd assets
+    update_graph
+  cd -
+  cd docs
+    build_docs
+  cd -
 }
 
 main

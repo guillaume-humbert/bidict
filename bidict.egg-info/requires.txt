@@ -1,34 +1,36 @@
 
 [coverage]
-coverage<5
+coverage<6
 pytest-cov<3
 
 [dev]
-setuptools_scm<4
-hypothesis<4
+setuptools_scm
+hypothesis<6
 py<2
-pytest<5
+pytest<7
 pytest-benchmark<4,>=3.2.0
 sortedcollections<2
 sortedcontainers<3
-Sphinx<2
-coverage<5
+Sphinx<4
+sphinx-autodoc-typehints<2
+coverage<6
 pytest-cov<3
-Sphinx<2
-pre-commit<2
+pre-commit<3
 tox<4
-flake8<3.8
-pydocstyle<3.1
-pylint<2.3
 
 [docs]
-Sphinx<2
+Sphinx<4
+sphinx-autodoc-typehints<2
+
+[precommit]
+pre-commit<3
 
 [test]
-hypothesis<4
+hypothesis<6
 py<2
-pytest<5
+pytest<7
 pytest-benchmark<4,>=3.2.0
 sortedcollections<2
 sortedcontainers<3
-Sphinx<2
+Sphinx<4
+sphinx-autodoc-typehints<2

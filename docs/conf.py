@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2009-2019 Joshua Bronson. All Rights Reserved.
+# Copyright 2009-2020 Joshua Bronson. All Rights Reserved.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23,15 +23,12 @@ import sys
 import os
 
 
-# pylint: disable=invalid-name
-
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('..'))
 
-import bidict  # noqa: E402; pylint: disable=wrong-import-position
+import bidict
 
 # -- General configuration ------------------------------------------------
 
@@ -41,8 +38,7 @@ suppress_warnings = ['image.nonlocal_uri']
 #needs_sphinx = '1.0'
 
 # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
+# extensions coming with Sphinx (named 'sphinx.ext.*') or custom ones.
 extensions = [
     'alabaster',
     'sphinx.ext.autodoc',
@@ -52,7 +48,11 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
+    'sphinx_autodoc_typehints',
 ]
+
+# https://github.com/agronholm/sphinx-autodoc-typehints#options
+set_type_checking_flag = True
 
 intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
 #todo_include_todos = True
@@ -70,9 +70,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'bidict'
+project = 'bidict'
 author = bidict.__author__
-copyright = bidict.__copyright__  # pylint: disable=redefined-builtin
+copyright = bidict.__copyright__
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -144,7 +144,7 @@ html_theme_options = dict(
     show_powered_by=False,
     show_relbar_bottom=True,
     donate_url='https://gumroad.com/l/bidict',
-    tidelift_url='https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=docs',  # noqa: E501; pylint: disable=line-too-long
+    tidelift_url='https://tidelift.com/subscription/pkg/pypi-bidict?utm_source=pypi-bidict&utm_medium=referral&utm_campaign=docs',
 )
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -246,7 +246,7 @@ htmlhelp_basename = 'bidictdoc'
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 #latex_documents = [
-#  ('index', 'bidict.tex', u'bidict Documentation',
+#  ('index', 'bidict.tex', 'bidict Documentation',
 #   author, 'manual'),
 #]
 
@@ -276,7 +276,7 @@ htmlhelp_basename = 'bidictdoc'
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 #man_pages = [
-#    ('index', 'bidict', u'bidict Documentation',
+#    ('index', 'bidict', 'bidict Documentation',
 #     [author], 1)
 #]
 
@@ -290,7 +290,7 @@ htmlhelp_basename = 'bidictdoc'
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 #texinfo_documents = [
-#  ('index', 'bidict', u'bidict Documentation',
+#  ('index', 'bidict', 'bidict Documentation',
 #   author, 'bidict', 'One line description of project.',
 #   'Miscellaneous'),
 #]
@@ -309,8 +309,14 @@ htmlhelp_basename = 'bidictdoc'
 
 # Ignore urls matching these regex strings when doing "make linkcheck"
 linkcheck_ignore = [
+    r'https://codecov\.io/.*',  # gives 405 for HEAD requests
+    r'https://pypistats\.org/.*',  # unreliable
+    # alternative links for readers on GitHub (which don't work on readthedocs.io):
+    r'CODE_OF_CONDUCT\.rst',
+    r'docs/intro\.rst',
+    r'docs/learning-from-bidict\.rst',
 ]
-linkcheck_timeout = 30  # 5s default too low
+linkcheck_timeout = 10  # 5s default too low
 
 # http://www.sphinx-doc.org/en/stable/ext/autosectionlabel.html#configuration
 autosectionlabel_prefix_document = True
@@ -321,5 +327,5 @@ doctest_global_setup = """
 
 
 def setup(app):
-    """https://docs.readthedocs.io/en/latest/guides/adding-custom-css.html#adding-custom-css-or-javascript-to-a-sphinx-project"""  # noqa: E501; pylint: disable=line-too-long
-    app.add_javascript('custom.js')
+    """https://docs.readthedocs.io/en/latest/guides/adding-custom-css.html#adding-custom-css-or-javascript-to-a-sphinx-project"""
+    app.add_js_file('custom.js')

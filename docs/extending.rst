@@ -1,76 +1,99 @@
 Extending ``bidict``
 --------------------
 
-Although bidict ships with all the bidict types we just covered,
-it's always possible users might need something more than what's provided.
+Although :mod:`bidict` provides the various bidirectional mapping types covered already,
+it's possible that some use case might require something more than what's provided.
 For this reason,
-bidict was written with extensibility in mind.
+:mod:`bidict` was written with extensibility in mind.
 
 Let's look at some examples.
 
 
-OverwritingBidict Recipe
-########################
+``YoloBidict`` Recipe
+#####################
 
 If you'd like
-:attr:`~bidict.OVERWRITE`
-to be the default duplication policy for
-:func:`~bidict.bidict.__setitem__` and
-:func:`~bidict.bidict.update`,
-rather than always having to use
-:func:`~bidict.bidict.forceput` and
-:func:`~bidict.bidict.forceupdate`,
+:attr:`~bidict.ON_DUP_DROP_OLD`
+to be the default :class:`~bidict.bidict.on_dup` behavior
+(for :meth:`~bidict.bidict.__init__`,
+:meth:`~bidict.bidict.__setitem__`, and
+:meth:`~bidict.bidict.update`),
 you can use the following recipe:
 
 .. doctest::
 
-   >>> from bidict import bidict, OVERWRITE
+   >>> from bidict import bidict, ON_DUP_DROP_OLD
 
-   >>> class OverwritingBidict(bidict):
-   ...     on_dup_val = OVERWRITE
+   >>> class YoloBidict(bidict):
+   ...     __slots__ = ()
+   ...     on_dup = ON_DUP_DROP_OLD
 
-   >>> b = OverwritingBidict({'one': 1})
+   >>> b = YoloBidict({'one': 1})
    >>> b['two'] = 1  # succeeds, no ValueDuplicationError
    >>> b
-   OverwritingBidict({'two': 1})
+   YoloBidict({'two': 1})
 
    >>> b.update({'three': 1})  # ditto
    >>> b
-   OverwritingBidict({'three': 1})
+   YoloBidict({'three': 1})
 
-As with
-:class:`bidict.bidict`,
-``OverwritingBidict.put()`` and
-``OverwritingBidict.putall()``
-will still provide per-call overrides for duplication policies,
-and will both still default to raising for all duplication types
-unless you override those methods too.
+Of course, ``YoloBidict``'s inherited
+:meth:`~bidict.bidict.put` and
+:meth:`~bidict.bidict.putall` methods
+still allow specifying a custom :class:`~bidict.OnDup`
+per call via the *on_dup* argument,
+and will both still default to raising for all duplication types.
 
-To make an overwriting *ordered* bidict,
-simply adapt this recipe to have the class inherit from
-:class:`bidict.OrderedBidict`.
+Further demonstrating :mod:`bidict`'s extensibility,
+to make an ``OrderedYoloBidict``,
+simply have the subclass above inherit from
+:class:`bidict.OrderedBidict`
+rather than :class:`bidict.bidict`.
 
 
-Beware of ``OVERWRITE``
-:::::::::::::::::::::::
+Beware of ``ON_DUP_DROP_OLD``
+:::::::::::::::::::::::::::::
 
-With a default :attr:`~bidict.OVERWRITE` policy
-as in the ``OverwritingBidict`` recipe above,
-beware of the following potentially surprising behavior:
+There's a good reason that :mod:`bidict` does not provide a ``YoloBidict`` out of the box.
+
+Before you decide to use a ``YoloBidict`` in your own code,
+beware of the following potentially unexpected, dangerous behavior:
 
 .. doctest::
 
-   >>> b = OverwritingBidict({'one': 1, 'two': 2})
-   >>> b['one'] = 2
+   >>> b = YoloBidict({'one': 1, 'two': 2})  # contains two items
+   >>> b['one'] = 2                          # update one of the items
+   >>> b                                     # now only has one item!
+   YoloBidict({'one': 2})
+
+As covered in :ref:`basic-usage:Key and Value Duplication`,
+setting an existing key to the value of a different existing item
+causes both existing items to quietly collapse into a single new item.
+
+A safer example of this type of customization would be something like:
+
+.. doctest::
+
+   >>> from bidict import ON_DUP_RAISE
+
+   >>> class YodoBidict(bidict):
+   ...     __slots__ = ()
+   ...     on_dup = ON_DUP_RAISE
+
+   >>> b = YodoBidict({'one': 1})
+   >>> b['one'] = 2  # Works with a regular bidict, but Yodo plays it safe.
+   Traceback (most recent call last):
+       ...
+   KeyDuplicationError: one
    >>> b
-   OverwritingBidict({'one': 2})
+   YodoBidict({'one': 1})
+   >>> b.forceput('one', 2)  # Any destructive change requires more force.
+   >>> b
+   YodoBidict({'one': 2})
 
-That is, setting an existing key to the value of a different existing item
-causes both existing items to be collapsed into a single item.
 
-
-Sorted Bidict Recipes
-#####################
+``SortedBidict`` Recipes
+########################
 
 Suppose you need a bidict that maintains its items in sorted order.
 The Python standard library does not include any sorted dict types,
@@ -78,21 +101,16 @@ but the excellent
 `sortedcontainers <http://www.grantjenks.com/docs/sortedcontainers/>`__ and
 `sortedcollections <http://www.grantjenks.com/docs/sortedcollections/>`__
 libraries do.
-Armed with these along with bidict's
-:attr:`~bidict.BidictBase._fwdm_cls`
-and
-:attr:`~bidict.BidictBase._invm_cls`
-attributes,
-creating a sorted bidict type is dead simple:
+
+Armed with these, along with :class:`~bidict.BidictBase`'s
+:attr:`~bidict.BidictBase._fwdm_cls` (forward mapping class) and
+:attr:`~bidict.BidictBase._invm_cls` (inverse mapping class) attributes,
+creating a sorted bidict is simple:
 
 .. doctest::
 
-   >>> # As an optimization, bidict.bidict includes a mixin class that
-   >>> # we can't use here (namely bidict._delegating_mixins._DelegateKeysAndItemsToFwdm),
-   >>> # so extend the parent class, bidict.MutableBidict, instead.
    >>> from bidict import MutableBidict
-
-   >>> import sortedcontainers
+   >>> from sortedcontainers import SortedDict
 
    >>> class SortedBidict(MutableBidict):
    ...     """A sorted bidict whose forward items stay sorted by their keys,
@@ -100,10 +118,10 @@ creating a sorted bidict type is dead simple:
    ...     Note: As a result, an instance and its inverse yield their items
    ...     in different orders.
    ...     """
-   ...
-   ...     _fwdm_cls = sortedcontainers.SortedDict
-   ...     _invm_cls = sortedcontainers.SortedDict
-   ...     _repr_delegate = list
+   ...     __slots__ = ()
+   ...     _fwdm_cls = SortedDict
+   ...     _invm_cls = SortedDict
+   ...     _repr_delegate = list  # only used for list-style repr
 
    >>> b = SortedBidict({'Tokyo': 'Japan', 'Cairo': 'Egypt'})
    >>> b
@@ -111,12 +129,10 @@ creating a sorted bidict type is dead simple:
 
    >>> b['Lima'] = 'Peru'
 
-   >>> # b stays sorted by its keys:
-   >>> list(b.items())
+   >>> list(b.items())  # stays sorted by key
    [('Cairo', 'Egypt'), ('Lima', 'Peru'), ('Tokyo', 'Japan')]
 
-   >>> # b.inverse stays sorted by *its* keys (b's values)
-   >>> list(b.inverse.items())
+   >>> list(b.inverse.items())  # .inverse stays sorted by *its* keys (b's values)
    [('Egypt', 'Cairo'), ('Japan', 'Tokyo'), ('Peru', 'Lima')]
 
 
@@ -126,51 +142,85 @@ will yield their items in *the same* order:
 
 .. doctest::
 
-   >>> import sortedcollections
+   >>> from sortedcollections import ValueSortedDict
 
    >>> class KeySortedBidict(MutableBidict):
-   ...     _fwdm_cls = sortedcontainers.SortedDict
-   ...     _invm_cls = sortedcollections.ValueSortedDict
+   ...     __slots__ = ()
+   ...     _fwdm_cls = SortedDict
+   ...     _invm_cls = ValueSortedDict
    ...     _repr_delegate = list
 
-   >>> element_by_atomic_number = KeySortedBidict({
-   ...     3: 'lithium', 1: 'hydrogen', 2: 'helium'})
+   >>> elem_by_atomicnum = KeySortedBidict({
+   ...     6: 'carbon', 1: 'hydrogen', 2: 'helium'})
 
-   >>> # stays sorted by key:
-   >>> element_by_atomic_number
-   KeySortedBidict([(1, 'hydrogen'), (2, 'helium'), (3, 'lithium')])
+   >>> list(elem_by_atomicnum.items())  # stays sorted by key
+   [(1, 'hydrogen'), (2, 'helium'), (6, 'carbon')]
 
-   >>> # .inverse stays sorted by value:
-   >>> list(element_by_atomic_number.inverse.items())
-   [('hydrogen', 1), ('helium', 2), ('lithium', 3)]
+   >>> list(elem_by_atomicnum.inverse.items())  # .inverse stays sorted by value
+   [('hydrogen', 1), ('helium', 2), ('carbon', 6)]
 
-   >>> element_by_atomic_number[4] = 'beryllium'
+   >>> elem_by_atomicnum[4] = 'beryllium'
 
-   >>> list(element_by_atomic_number.inverse.items())
-   [('hydrogen', 1), ('helium', 2), ('lithium', 3), ('beryllium', 4)]
+   >>> list(elem_by_atomicnum.inverse.items())
+   [('hydrogen', 1), ('helium', 2), ('beryllium', 4), ('carbon', 6)]
 
-   >>> # This works because a bidict whose _fwdm_cls differs from its _invm_cls computes
-   >>> # its inverse class -- which (note) is not actually the same class as the original,
-   >>> # as it needs to have its _fwdm_cls and _invm_cls swapped -- automatically.
-   >>> # You can see this if you inspect the inverse bidict:
-   >>> element_by_atomic_number.inverse  # Note the different class, which was auto-generated:
-   KeySortedBidictInv([('hydrogen', 1), ('helium', 2), ('lithium', 3), ('beryllium', 4)])
-   >>> ValueSortedBidict = element_by_atomic_number.inverse.__class__
-   >>> ValueSortedBidict._fwdm_cls
-   <class 'sortedcollections.recipes.ValueSortedDict'>
-   >>> ValueSortedBidict._invm_cls
-   <class 'sortedcontainers.sorteddict.SortedDict'>
 
-   >>> # Round trips work as expected:
-   >>> atomic_number_by_element = ValueSortedBidict(element_by_atomic_number.inverse)
-   >>> atomic_number_by_element
-   KeySortedBidictInv([('hydrogen', 1), ('helium', 2), ('lithium', 3), ('beryllium', 4)])
-   >>> KeySortedBidict(atomic_number_by_element.inverse) == element_by_atomic_number
+Dynamic Inverse Class Generation
+::::::::::::::::::::::::::::::::
+
+When a bidict class's
+:attr:`~bidict.BidictBase._fwdm_cls` and
+:attr:`~bidict.BidictBase._invm_cls`
+are the same,
+the bidict class is its own inverse class.
+(This is the case for all the
+:ref:`bidict classes <other-bidict-types:Bidict Types Diagram>`
+that come with :mod:`bidict`.)
+
+However, when a bidict's
+:attr:`~bidict.BidictBase._fwdm_cls` and
+:attr:`~bidict.BidictBase._invm_cls` differ,
+as in the ``KeySortedBidict`` example above,
+the inverse class of the bidict
+needs to have its
+:attr:`~bidict.BidictBase._fwdm_cls` and
+:attr:`~bidict.BidictBase._invm_cls` swapped.
+
+:class:`~bidict.BidictBase` detects this
+and dynamically computes the correct inverse class for you automatically.
+
+You can see this if you inspect ``KeySortedBidict``'s inverse bidict:
+
+   >>> elem_by_atomicnum.inverse.__class__.__name__
+   'KeySortedBidictInv'
+
+Notice that :class:`~bidict.BidictBase` automatically created a
+``KeySortedBidictInv`` class and used it for the inverse bidict.
+
+As expected, ``KeySortedBidictInv``'s
+:attr:`~bidict.BidictBase._fwdm_cls` and
+:attr:`~bidict.BidictBase._invm_cls`
+are the opposite of ``KeySortedBidict``'s:
+
+   >>> elem_by_atomicnum.inverse._fwdm_cls.__name__
+   'ValueSortedDict'
+   >>> elem_by_atomicnum.inverse._invm_cls.__name__
+   'SortedDict'
+
+:class:`~bidict.BidictBase` also ensures that round trips work as expected:
+
+   >>> KeySortedBidictInv = elem_by_atomicnum.inverse.__class__  # i.e. a value-sorted bidict
+   >>> atomicnum_by_elem = KeySortedBidictInv(elem_by_atomicnum.inverse)
+   >>> atomicnum_by_elem
+   KeySortedBidictInv([('hydrogen', 1), ('helium', 2), ('beryllium', 4), ('carbon', 6)])
+   >>> KeySortedBidict(atomicnum_by_elem.inverse) == elem_by_atomicnum
    True
 
-   >>> # One other useful trick:
-   >>> # To pass method calls through to the _fwdm SortedDict when not present
-   >>> # on the bidict instance, provide a custom __getattribute__ method:
+You can even play tricks with attribute lookup redirection here too.
+For example, to pass attribute access through to the backing ``_fwdm`` mapping
+when an attribute is not provided by the bidict class itself,
+you can override :meth:`~object.__getattribute__` as follows:
+
    >>> def __getattribute__(self, name):
    ...     try:
    ...         return object.__getattribute__(self, name)
@@ -179,11 +229,16 @@ will yield their items in *the same* order:
 
    >>> KeySortedBidict.__getattribute__ = __getattribute__
 
-   >>> # bidict has no .peekitem attr, so the call is passed through to _fwdm:
-   >>> element_by_atomic_number.peekitem()
-   (4, 'beryllium')
-   >>> element_by_atomic_number.inverse.peekitem()
-   ('beryllium', 4)
+Now, even though this ``KeySortedBidict`` itself provides no ``peekitem`` attribute,
+the following call still succeeds
+because it's passed through to the backing ``SortedDict``:
 
+   >>> elem_by_atomicnum.peekitem()
+   (6, 'carbon')
+
+
+This goes to show how simple it can be
+to compose your own bidirectional mapping types
+out of the building blocks that :mod:`bidict` provides.
 
 Next proceed to :doc:`other-functionality`.

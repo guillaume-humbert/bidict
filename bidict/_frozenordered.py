@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2009-2019 Joshua Bronson. All Rights Reserved.
+# Copyright 2009-2020 Joshua Bronson. All Rights Reserved.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25,38 +25,48 @@
 #← Prev: _orderedbase.py  Current: _frozenordered.py  Next: _orderedbidict.py →
 #==============================================================================
 
-"""Provides :class:`FrozenOrderedBidict`, an immutable, hashable, ordered bidict."""
+"""Provide :class:`FrozenOrderedBidict`, an immutable, hashable, ordered bidict."""
 
-from ._delegating_mixins import _DelegateKeysToFwdm
+import typing as _t
+
 from ._frozenbidict import frozenbidict
 from ._orderedbase import OrderedBidictBase
-from .compat import DICTS_ORDERED, PY2, izip
+from ._typing import KT, VT
 
 
-# If the Python implementation's dict type is ordered (e.g. PyPy or CPython >= 3.6), then
-# `FrozenOrderedBidict` can delegate to `_fwdm` for keys: Both `_fwdm` and `_invm` will always
-# be initialized with the provided items in the correct order, and since `FrozenOrderedBidict`
-# is immutable, their respective orders can't get out of sync after a mutation. (Can't delegate
-# to `_fwdm` for items though because values in `_fwdm` are nodes.)
-_BASES = ((_DelegateKeysToFwdm,) if DICTS_ORDERED else ()) + (OrderedBidictBase,)
-_CLSDICT = dict(
-    __slots__=(),
-    # Must set __hash__ explicitly, Python prevents inheriting it.
-    # frozenbidict.__hash__ can be reused for FrozenOrderedBidict:
-    # FrozenOrderedBidict inherits BidictBase.__eq__ which is order-insensitive,
-    # and frozenbidict.__hash__ is consistent with BidictBase.__eq__.
-    __hash__=frozenbidict.__hash__.__func__ if PY2 else frozenbidict.__hash__,
-    __doc__='Hashable, immutable, ordered bidict type.',
-    __module__=__name__,  # Otherwise unpickling fails in Python 2.
-)
+class FrozenOrderedBidict(OrderedBidictBase[KT, VT]):
+    """Hashable, immutable, ordered bidict type."""
 
-# When PY2 (so we provide iteritems) and DICTS_ORDERED, e.g. on PyPy, the following implementation
-# of iteritems may be more efficient than that inherited from `Mapping`. This exploits the property
-# that the keys in `_fwdm` and `_invm` are already in the right order:
-if PY2 and DICTS_ORDERED:
-    _CLSDICT['iteritems'] = lambda self: izip(self._fwdm, self._invm)  # noqa: E501; pylint: disable=protected-access
+    __slots__ = ()
+    __hash__ = frozenbidict.__hash__
 
-FrozenOrderedBidict = type('FrozenOrderedBidict', _BASES, _CLSDICT)  # pylint: disable=invalid-name
+    if _t.TYPE_CHECKING:  # pragma: no cover
+        @property
+        def inverse(self) -> 'FrozenOrderedBidict[VT, KT]': ...
+
+    # Assume the Python implementation's dict type is ordered (e.g. PyPy or CPython >= 3.6), so we
+    # can delegate to `_fwdm` and `_invm` for faster implementations of several methods. Both
+    # `_fwdm` and `_invm` will always be initialized with the provided items in the correct order,
+    # and since `FrozenOrderedBidict` is immutable, their respective orders can't get out of sync
+    # after a mutation.
+    def __iter__(self) -> _t.Iterator[KT]:
+        """Iterator over the contained keys in insertion order."""
+        return self._iter()
+
+    def _iter(self, *, reverse: bool = False) -> _t.Iterator[KT]:
+        if reverse:
+            return super()._iter(reverse=True)
+        return iter(self._fwdm._fwdm)
+
+    def keys(self) -> _t.KeysView[KT]:
+        """A set-like object providing a view on the contained keys."""
+        return self._fwdm._fwdm.keys()
+
+    def values(self) -> _t.KeysView[VT]:  # type: ignore
+        """A set-like object providing a view on the contained values."""
+        return self._invm._fwdm.keys()
+
+    # We can't delegate for items because values in `_fwdm` are nodes.
 
 
 #                             * Code review nav *

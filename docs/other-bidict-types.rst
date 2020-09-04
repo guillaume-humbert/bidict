@@ -8,7 +8,7 @@ let's look at some other bidirectional mapping types.
 .. testsetup::
 
    from bidict import bidict
-   from bidict.compat import Mapping, MutableMapping
+   from collections.abc import Mapping, MutableMapping
 
 
 Bidict Types Diagram
@@ -24,15 +24,7 @@ This abstract base class
 extends :class:`collections.abc.Mapping`
 by adding the
 ":attr:`~bidict.BidirectionalMapping.inverse`"
-:obj:`~abc.abstractproperty`. [#fn-subclasshook]_
-
-.. [#fn-subclasshook]
-   In fact, any :class:`collections.abc.Mapping`
-   that provides an ``inverse`` attribute
-   will be considered a virtual subclass of
-   :class:`bidict.BidirectionalMapping`
-   :meth:`automatically <bidict.BidirectionalMapping.__subclasshook__>`,
-   enabling interoperability with external implementations.
+:obj:`~abc.abstractproperty`.
 
 As you may have noticed,
 :class:`bidict.bidict` is also
@@ -310,7 +302,7 @@ allowing the creation of e.g. a named frozenbidict type:
    >>> noble = ElMap(He='helium')
    >>> noble.symbol_for['helium']
    'He'
-   >>> hash(noble) is not 'an error'
+   >>> hash(noble) is not TypeError  # does not raise TypeError: unhashable type
    True
    >>> noble['C'] = 'carbon'  # mutation fails
    Traceback (most recent call last):

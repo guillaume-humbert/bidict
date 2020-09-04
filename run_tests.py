@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Copyright 2009-2019 Joshua Bronson. All Rights Reserved.
+# Copyright 2009-2020 Joshua Bronson. All Rights Reserved.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,8 +9,10 @@
 
 """Run all tests."""
 
+import sys
 from functools import reduce
 from operator import or_
+
 from pytest import main as pytest_main
 from sphinx.cmd.build import main as sphinx_main
 
@@ -24,4 +26,4 @@ TEST_FUNCS = [
     lambda: sphinx_main('-b doctest -d docs/_build/doctrees docs docs/_build/doctest'.split()),
 ]
 
-exit(reduce(or_, (f() for f in TEST_FUNCS)))
+sys.exit(reduce(or_, (f() for f in TEST_FUNCS)))
