@@ -4,7 +4,7 @@ bidict (0.21.0-1) UNRELEASED; urgency=medium
   * Bump Standards-Version to 4.4.1.
 
   [ Håvard Flaget Aasen ]
-  * New upstream version 0.21.0
+  * New upstream version 0.21.0 Closes: #963380
   * Rebase patches
   * d/control:
     - Add python3-sphinx-autodoc-typehints as Build-Depends
