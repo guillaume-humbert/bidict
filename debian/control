@@ -1,7 +1,7 @@
 Source: bidict
 Section: python
 Priority: optional
-Maintainer: Debian Python Modules Team <python-modules-team@alioth-lists.debian.net>
+Maintainer: Debian Python Team <team+python@tracker.debian.org>
 Uploaders: William Grzybowski <william@grzy.org>
 Build-Depends: debhelper-compat (= 13),
                dh-python,
