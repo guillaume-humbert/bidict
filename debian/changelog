@@ -1,10 +1,5 @@
 bidict (0.21.0-1) unstable; urgency=medium
 
-  * Team upload.
-  [ Ondřej Nový ]
-  * Bump Standards-Version to 4.4.1.
-
-  [ Håvard Flaget Aasen ]
   * New upstream version 0.21.0 Closes: #963380
   * Rebase patches
   * d/control:
