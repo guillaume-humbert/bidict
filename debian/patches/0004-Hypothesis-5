@@ -1,0 +1,11 @@
+--- a/tests/properties/_strategies.py
++++ b/tests/properties/_strategies.py
+@@ -52,7 +52,7 @@
+ I_PAIRS_NODUP = st.iterables(PAIRS, unique_by=FST_SND, max_size=MAX)
+ DIFF_ITEMS = st.lists(L_PAIRS_NODUP.map(frozenset), min_size=2, max_size=2, unique=True)
+ SAME_ITEMS_DIFF_ORDER = st.tuples(
+-    st.lists(PAIRS, unique_by=FST_SND, min_size=2, max_size=MAX), st.randoms(use_true_random=False)
++    st.lists(PAIRS, unique_by=FST_SND, min_size=2, max_size=MAX), st.randoms()
+ ).map(
+     lambda i: (i[0], i[1].sample(i[0], len(i[0])))  # (seq, shuffled seq)
+ ).filter(lambda i: i[0] != i[1])
